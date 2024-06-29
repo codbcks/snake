@@ -106,6 +106,9 @@ public class SnakeApp extends Application {
 			gc.setFill(Color.RED);
 			gc.setFont(new Font("", 50));
 			gc.fillText("GAME OVER", 100, 250);
+			gc.setFill(Color.WHITE);
+			gc.setFont(new Font("", 20));
+			gc.fillText("Score: " + (speed - 5), 200, 285);
 			return;
 		}
 
