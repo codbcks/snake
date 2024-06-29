@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,7 +19,7 @@ import javafx.stage.Stage;
 public class SnakeApp extends Application {
     static int stageWidth = 20;
 	static int stageHeight = 20;
-	static boolean gameOver = true;
+	static boolean gameOver = false;
 	static int blockSize = 25;
 	static List<Position> snake = new ArrayList<>();
 	static Direction direction = Direction.LEFT;
@@ -69,10 +70,26 @@ public class SnakeApp extends Application {
 
 			Scene snakeScene = new Scene(root, stageWidth * blockSize, stageHeight * blockSize);
 
+			// key events
+			snakeScene.setOnKeyPressed(key -> {
+				if (key.getCode() == KeyCode.W && direction != Direction.DOWN) {
+					direction = Direction.UP;
+				}
+				if (key.getCode() == KeyCode.S && direction != Direction.UP) {
+					direction = Direction.DOWN;
+				}
+				if (key.getCode() == KeyCode.A && direction != Direction.RIGHT) {
+					direction = Direction.LEFT;
+				}
+				if (key.getCode() == KeyCode.D && direction != Direction.LEFT) {
+					direction = Direction.RIGHT;
+				}
+			});
 
-			// snake.add(new Position(stageWidth / 2, stageHeight / 2));
-			// snake.add(new Position(stageWidth / 2 + 1, stageHeight / 2));
-			// snake.add(new Position(stageWidth / 2 + 2, stageHeight / 2));
+
+			snake.add(new Position(stageWidth / 2, stageHeight / 2));
+			snake.add(new Position(stageWidth / 2 + 1, stageHeight / 2));
+			snake.add(new Position(stageWidth / 2 + 2, stageHeight / 2));
 			primaryStage.setTitle("Snake");
 			primaryStage.setScene(snakeScene);
 			primaryStage.show();
@@ -86,7 +103,6 @@ public class SnakeApp extends Application {
     	gc.fillRect(0, 0, stageWidth * blockSize, stageHeight * blockSize);
 
 		if (gameOver) {
-			gc.fill();
 			gc.setFill(Color.RED);
 			gc.setFont(new Font("", 50));
 			gc.fillText("GAME OVER", 100, 250);
@@ -125,6 +141,39 @@ public class SnakeApp extends Application {
 			}
 			break;
 		}
+
+		// check if food is eaten
+		if (food.x == snake.get(0).x && food.y == snake.get(0).y) {
+			snake.add(new Position(-1, -1));
+			newFood();
+		}
+
+		// check if snake collides with itself
+		for (int i = 1; i < snake.size(); i++) {
+			if (snake.get(0).x == snake.get(i).x && snake.get(0).y == snake.get(i).y) {
+				gameOver = true;
+				break;
+			}
+		}
+
+		// fill background
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, stageWidth * blockSize, stageHeight * blockSize);
+
+		// draw snake
+		for (Position part : snake) {
+			gc.setFill(Color.LIME);
+			gc.fillRoundRect(part.x * blockSize, part.y * blockSize, blockSize, blockSize, 10, 10);
+		}
+
+		// draw food
+		gc.setFill(Color.RED);
+		gc.fillOval(food.x * blockSize, food.y * blockSize, blockSize, blockSize);
+
+		// draw score
+		gc.setFill(Color.WHITE);
+		gc.setFont(new Font("", 30));
+		gc.fillText("Score: " + (speed - 5), 10, 30);
 	}
 
 	public static void newFood() {
@@ -137,7 +186,6 @@ public class SnakeApp extends Application {
 					continue start;
 				}
 			}
-			Color foodcolor = Color.RED;
 			speed++;
 			break;
 
