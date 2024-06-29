@@ -99,9 +99,8 @@ public class SnakeApp extends Application {
 	}
 
 	public static void tick(GraphicsContext gc) {
-		gc.setFill(Color.BLACK);
-    	gc.fillRect(0, 0, stageWidth * blockSize, stageHeight * blockSize);
 
+		// game over screen
 		if (gameOver) {
 			gc.setFill(Color.RED);
 			gc.setFont(new Font("", 50));
@@ -118,6 +117,7 @@ public class SnakeApp extends Application {
 			snake.get(i).y = snake.get(i - 1).y;
 		}
 
+		// change direction and if collides with wall
 		switch (direction) {
 		case UP:
 			snake.get(0).y--;
@@ -145,13 +145,13 @@ public class SnakeApp extends Application {
 			break;
 		}
 
-		// check if food is eaten
+		// if food is eaten
 		if (food.x == snake.get(0).x && food.y == snake.get(0).y) {
 			snake.add(new Position(-1, -1));
 			newFood();
 		}
 
-		// check if snake collides with itself
+		// if snake collides with itself
 		for (int i = 1; i < snake.size(); i++) {
 			if (snake.get(0).x == snake.get(i).x && snake.get(0).y == snake.get(i).y) {
 				gameOver = true;
@@ -179,6 +179,7 @@ public class SnakeApp extends Application {
 		gc.fillText("Score: " + (speed - 5), 10, 30);
 	}
 
+	// generate new food
 	public static void newFood() {
 		start: while (true) {
 			food.x = random.nextInt(stageWidth);
