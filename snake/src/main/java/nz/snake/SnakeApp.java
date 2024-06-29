@@ -93,7 +93,38 @@ public class SnakeApp extends Application {
 			return;
 		}
 
-		//implement rest of game
+		// move snake
+		for (int i = snake.size() - 1; i >= 1; i--) {
+			snake.get(i).x = snake.get(i - 1).x;
+			snake.get(i).y = snake.get(i - 1).y;
+		}
+
+		switch (direction) {
+		case UP:
+			snake.get(0).y--;
+			if (snake.get(0).y < 0) {
+				gameOver = true;
+			}
+			break;
+		case DOWN:
+			snake.get(0).y++;
+			if (snake.get(0).y >= stageHeight) {
+				gameOver = true;
+			}
+			break;
+		case LEFT:
+			snake.get(0).x--;
+			if (snake.get(0).x < 0) {
+				gameOver = true;
+			}
+			break;
+		case RIGHT:
+			snake.get(0).x++;
+			if (snake.get(0).x >= stageWidth) {
+				gameOver = true;
+			}
+			break;
+		}
 	}
 
 	public static void newFood() {
