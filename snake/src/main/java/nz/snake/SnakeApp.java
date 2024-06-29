@@ -1,35 +1,60 @@
 package nz.snake;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import nz.snake.SceneManager.AppUi;
+
 
 public class SnakeApp extends Application {
-    private static Scene scene;
+    static int stageWidth = 20;
+	static int stageHeight = 20;
+	static boolean gameOver = false;
+	static int blockSize = 25;
+	static List<Position> snake = new ArrayList<>();
+	static Direction direction = Direction.LEFT;
+	static Random random = new Random();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	public enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
 
-    @Override
-    public void start(final Stage stage) throws IOException {
+	public static class Position {
+		int x;
+		int y;
 
-        SceneManager.addUi(AppUi.STARTER_PAGE, loadFxml("chess"));
+		public Position(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+	}
 
-        scene = new Scene(SceneManager.getUi(AppUi.STARTER_PAGE), 800, 800);
-        stage.setScene(scene);
-        stage.show();
-    }
+	public void start(Stage primaryStage) {
+		try {
 
-    public static void setRoot(String fxml) throws IOException {
-        scene = new Scene(loadFxml(fxml), 800, 800);
-    }
+			VBox root = new VBox();
+			Canvas c = new Canvas(stageWidth * blockSize, stageHeight * blockSize);
+			root.getChildren().add(c);
+			Scene snakeScene = new Scene(root, stageWidth * blockSize, stageHeight * blockSize);
 
-    private static Parent loadFxml(final String fxml) throws IOException {
-        return new FXMLLoader(SnakeApp.class.getResource("/fxml/" + fxml + ".fxml")).load();
-    }
+
+			// snake.add(new Position(stageWidth / 2, stageHeight / 2));
+			// snake.add(new Position(stageWidth / 2 + 1, stageHeight / 2));
+			// snake.add(new Position(stageWidth / 2 + 2, stageHeight / 2));
+			primaryStage.setTitle("Snake");
+			primaryStage.setScene(snakeScene);
+			primaryStage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
