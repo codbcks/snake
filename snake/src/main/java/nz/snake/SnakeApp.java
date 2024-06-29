@@ -72,16 +72,16 @@ public class SnakeApp extends Application {
 
 			// key events
 			snakeScene.setOnKeyPressed(key -> {
-				if (key.getCode() == KeyCode.W && direction != Direction.DOWN) {
+				if ((key.getCode() == KeyCode.W || key.getCode() == KeyCode.UP) && direction != Direction.DOWN) {
 					direction = Direction.UP;
 				}
-				if (key.getCode() == KeyCode.S && direction != Direction.UP) {
+				if ((key.getCode() == KeyCode.S || key.getCode() == KeyCode.DOWN) && direction != Direction.UP) {
 					direction = Direction.DOWN;
 				}
-				if (key.getCode() == KeyCode.A && direction != Direction.RIGHT) {
+				if ((key.getCode() == KeyCode.A || key.getCode() == KeyCode.LEFT) && direction != Direction.RIGHT) {
 					direction = Direction.LEFT;
 				}
-				if (key.getCode() == KeyCode.D && direction != Direction.LEFT) {
+				if ((key.getCode() == KeyCode.D || key.getCode() == KeyCode.RIGHT) && direction != Direction.LEFT) {
 					direction = Direction.RIGHT;
 				}
 			});
